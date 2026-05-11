@@ -6,9 +6,11 @@ const { auth, authorize } = require('../middleware/auth');
 
 const router = express.Router();
 
+// Retrieve active menu categories sorted by display order
 router.get('/categories', async (req, res) => {
   try {
     const categories = await MenuCategory.find({ isActive: true })
+      // Sort by displayOrder first, then by name
       .sort({ displayOrder: 1, name: 1 })
       .populate('parentCategory', 'name');
 
