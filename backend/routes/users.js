@@ -24,12 +24,14 @@ router.get('/', auth, authorize('admin', 'manager'), [
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
     const skip = (page - 1) * limit;
+    // Calculate how many records to skip for pagination
     const { role, search, isActive } = req.query;
 
     const filter = {};
     if (role) filter.role = role;
     if (isActive !== undefined) filter.isActive = isActive === 'true';
     if (search) {
+      // Search across multiple fields using regex
       filter.$or = [
         { firstName: { $regex: search, $options: 'i' } },
         { lastName: { $regex: search, $options: 'i' } },
