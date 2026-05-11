@@ -24,14 +24,20 @@ const limiter = rateLimit({
   message: 'Too many requests from this IP, please try again later.'
 });
 
+// Security middleware
 app.use(helmet());
+// Enable CORS for frontend requests
 app.use(cors());
+// Request logging
 app.use(morgan('combined'));
+// Rate limiting to prevent abuse
 app.use(limiter);
+// Sanitize input to prevent injection attacks
 app.use(sanitizeInput);
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
+// Connect to MongoDB database
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/restaurant', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
