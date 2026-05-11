@@ -18,7 +18,7 @@ const menuCategorySchema = new mongoose.Schema({
   },
   displayOrder: {
     type: Number,
-    default: 0
+    default: 0 // Controls menu category sort order
   },
   isActive: {
     type: Boolean,
@@ -27,7 +27,7 @@ const menuCategorySchema = new mongoose.Schema({
   parentCategory: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'MenuCategory',
-    default: null
+    default: null // Allows hierarchical category structure (subcategories)
   }
 }, {
   timestamps: true
