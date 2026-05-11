@@ -26,6 +26,7 @@ router.get('/', auth, authorize('admin', 'manager', 'chef'), [
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
     const skip = (page - 1) * limit;
+    // Calculate pagination offset
     const { category, search, stockStatus, isActive } = req.query;
 
     const filter = {};
@@ -39,8 +40,10 @@ router.get('/', auth, authorize('admin', 'manager', 'chef'), [
     }
 
     if (stockStatus) {
+      // Filter by stock level using MongoDB aggregation expressions
       switch (stockStatus) {
         case 'low_stock':
+          // currentStock <= minStock
           filter.$expr = { $lte: ['$currentStock', '$minStock'] };
           break;
         case 'out_of_stock':
@@ -50,6 +53,7 @@ router.get('/', auth, authorize('admin', 'manager', 'chef'), [
           filter.$expr = { $gte: ['$currentStock', '$maxStock'] };
           break;
         case 'in_stock':
+          // currentStock > 0 AND currentStock > minStock AND currentStock < maxStock
           filter.$expr = {
             $and: [
               { $gt: ['$currentStock', 0] },
@@ -68,12 +72,12 @@ router.get('/', auth, authorize('admin', 'manager', 'chef'), [
 
     const itemsWithStatus = inventoryItems.map(item => ({
       ...item.toObject(),
-      isLowStock: item.currentStock <= item.minStock,
+      isLowStock: item.currentStock <= item.minStock, // Flag low stock items
       stockStatus: item.stockStatus
     }));
 
     const total = await InventoryItem.countDocuments(filter);
-
+    // Count total documents matching filter for pagination
     res.json({
       success: true,
       data: {
