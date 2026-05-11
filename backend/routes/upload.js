@@ -7,6 +7,7 @@ const router = express.Router();
 
 router.post('/menu-image', auth, authorize('admin', 'manager'), handleUpload, (req, res) => {
   try {
+    // Check if file was uploaded by multer middleware
     if (!req.file) {
       return res.status(400).json({
         success: false,
@@ -15,7 +16,7 @@ router.post('/menu-image', auth, authorize('admin', 'manager'), handleUpload, (r
     }
 
     const fileUrl = `/uploads/${req.file.filename}`;
-    
+    // File is now accessible at this URL
     res.json({
       success: true,
       message: 'File uploaded successfully',
@@ -38,6 +39,7 @@ router.post('/menu-image', auth, authorize('admin', 'manager'), handleUpload, (r
 
 router.post('/multiple-images', auth, authorize('admin', 'manager'), handleMultipleUpload, (req, res) => {
   try {
+    // Check if multiple files were uploaded
     if (!req.files || req.files.length === 0) {
       return res.status(400).json({
         success: false,
@@ -46,6 +48,7 @@ router.post('/multiple-images', auth, authorize('admin', 'manager'), handleMulti
     }
 
     const uploadedFiles = req.files.map(file => ({
+      // Map multer file objects to response format
       filename: file.filename,
       originalName: file.originalname,
       size: file.size,
