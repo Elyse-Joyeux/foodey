@@ -7,6 +7,7 @@ const { auth } = require('../middleware/auth');
 const router = express.Router();
 
 const generateToken = (id) => {
+  // Generate JWT token valid for 7 days by default
   return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRE || '7d'
   });
@@ -33,6 +34,7 @@ router.post('/register', [
     const { firstName, lastName, email, password, phone, role = 'customer' } = req.body;
 
     const existingUser = await User.findOne({ email });
+    // Check if user already exists with this email
     if (existingUser) {
       return res.status(400).json({
         success: false,
