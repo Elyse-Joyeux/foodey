@@ -6,6 +6,7 @@ const errorHandler = (err, req, res, next) => {
 
   console.error('Error:', err);
 
+  // MongoDB validation error (failed schema validation)
   if (err.name === 'ValidationError') {
     const message = Object.values(err.errors).map(val => val.message).join(', ');
     error = {
@@ -15,6 +16,7 @@ const errorHandler = (err, req, res, next) => {
     };
   }
 
+  // MongoDB duplicate key error (unique field already exists)
   if (err.code === 11000) {
     const field = Object.keys(err.keyValue)[0];
     const value = err.keyValue[field];
@@ -25,6 +27,7 @@ const errorHandler = (err, req, res, next) => {
     };
   }
 
+  // Invalid MongoDB ObjectId format
   if (err.name === 'CastError') {
     error = {
       statusCode: 400,
@@ -33,6 +36,7 @@ const errorHandler = (err, req, res, next) => {
     };
   }
 
+  // JWT token is invalid or malformed
   if (err.name === 'JsonWebTokenError') {
     error = {
       statusCode: 401,
@@ -41,6 +45,7 @@ const errorHandler = (err, req, res, next) => {
     };
   }
 
+  // JWT token has expired
   if (err.name === 'TokenExpiredError') {
     error = {
       statusCode: 401,
@@ -49,6 +54,7 @@ const errorHandler = (err, req, res, next) => {
     };
   }
 
+  // File upload error from multer
   if (err.name === 'MulterError') {
     if (err.code === 'LIMIT_FILE_SIZE') {
       error = {
