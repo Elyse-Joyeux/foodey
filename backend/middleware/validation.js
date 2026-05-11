@@ -18,10 +18,12 @@ const handleValidationErrors = (req, res, next) => {
   next();
 };
 
+// Validate MongoDB ObjectId format in URL parameters
 const validateObjectId = (paramName = 'id') => {
   return (req, res, next) => {
     const { [paramName]: id } = req.params;
     
+    // MongoDB ObjectId must be exactly 24 hexadecimal characters
     if (!id || !/^[0-9a-fA-F]{24}$/.test(id)) {
       return res.status(400).json({
         success: false,
@@ -33,10 +35,12 @@ const validateObjectId = (paramName = 'id') => {
   };
 };
 
+// Validate pagination parameters (page and limit)
 const validatePagination = (req, res, next) => {
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
   
+  // Page must start from 1
   if (page < 1) {
     return res.status(400).json({
       success: false,
@@ -44,6 +48,7 @@ const validatePagination = (req, res, next) => {
     });
   }
   
+  // Limit must be between 1 and 100 to prevent large data fetches
   if (limit < 1 || limit > 100) {
     return res.status(400).json({
       success: false,
@@ -51,6 +56,7 @@ const validatePagination = (req, res, next) => {
     });
   }
   
+  // Attach validated pagination to request
   req.pagination = { page, limit };
   next();
 };
