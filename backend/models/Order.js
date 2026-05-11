@@ -40,12 +40,12 @@ const orderSchema = new mongoose.Schema({
   items: [orderItemSchema],
   status: {
     type: String,
-    enum: ['pending', 'confirmed', 'preparing', 'ready', 'served', 'completed', 'cancelled'],
+    enum: ['pending', 'confirmed', 'preparing', 'ready', 'served', 'completed', 'cancelled'], // Order lifecycle stages
     default: 'pending'
   },
   orderType: {
     type: String,
-    enum: ['dine_in', 'takeaway', 'delivery'],
+    enum: ['dine_in', 'takeaway', 'delivery'], // Different service types
     required: true
   },
   tableNumber: {
@@ -61,7 +61,7 @@ const orderSchema = new mongoose.Schema({
     type: Number,
     required: true,
     min: 0,
-    default: 0
+    default: 0 // Automatically calculated as percentage of subtotal
   },
   discount: {
     type: Number,
