@@ -27,6 +27,7 @@ router.get('/', auth, authorize('admin', 'manager'), [
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
     const skip = (page - 1) * limit;
+    // Calculate pagination offset
     const { position, department, isActive, search } = req.query;
 
     const filter = {};
@@ -36,10 +37,11 @@ router.get('/', auth, authorize('admin', 'manager'), [
 
     let staffQuery = Staff.find(filter).populate({
       path: 'user',
-      select: 'firstName lastName email phone avatar'
+      select: 'firstName lastName email phone avatar' // Fetch linked user data
     });
 
     if (search) {
+      // Search through user details (firstName, lastName, email)
       staffQuery = staffQuery.populate({
         path: 'user',
         match: {
