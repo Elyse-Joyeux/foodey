@@ -3,6 +3,7 @@ const User = require('../models/User');
 
 const auth = async (req, res, next) => {
   try {
+    // Extract JWT token from Authorization header
     const token = req.header('Authorization')?.replace('Bearer ', '');
     
     if (!token) {
@@ -12,7 +13,9 @@ const auth = async (req, res, next) => {
       });
     }
 
+    // Verify and decode JWT token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    // Find user from decoded token ID
     const user = await User.findById(decoded.id).select('-password');
     
     if (!user) {
@@ -22,6 +25,7 @@ const auth = async (req, res, next) => {
       });
     }
 
+    // Check if user account is active
     if (!user.isActive) {
       return res.status(401).json({ 
         success: false, 
@@ -29,6 +33,7 @@ const auth = async (req, res, next) => {
       });
     }
 
+    // Attach user to request object for downstream handlers
     req.user = user;
     next();
   } catch (error) {
@@ -51,8 +56,10 @@ const auth = async (req, res, next) => {
   }
 };
 
+// Role-based authorization middleware
 const authorize = (...roles) => {
   return (req, res, next) => {
+    // Check if user has required role
     if (!roles.includes(req.user.role)) {
       return res.status(403).json({ 
         success: false, 
