@@ -15,7 +15,7 @@ const inventoryItemSchema = new mongoose.Schema({
   category: {
     type: String,
     required: [true, 'Category is required'],
-    enum: ['produce', 'dairy', 'meat', 'seafood', 'grains', 'spices', 'beverages', 'packaged', 'other']
+    enum: ['produce', 'dairy', 'meat', 'seafood', 'grains', 'spices', 'beverages', 'packaged', 'other'] // Type of inventory item
   },
   unit: {
     type: String,
@@ -25,22 +25,22 @@ const inventoryItemSchema = new mongoose.Schema({
   currentStock: {
     type: Number,
     required: [true, 'Current stock is required'],
-    min: [0, 'Stock cannot be negative']
+    min: [0, 'Stock cannot be negative'] // Actual quantity in stock
   },
   minStock: {
     type: Number,
     required: [true, 'Minimum stock is required'],
-    min: [0, 'Minimum stock cannot be negative']
+    min: [0, 'Minimum stock cannot be negative'] // Alert when stock falls below this
   },
   maxStock: {
     type: Number,
     required: [true, 'Maximum stock is required'],
-    min: [0, 'Maximum stock cannot be negative']
+    min: [0, 'Maximum stock cannot be negative'] // Maximum recommended stock level
   },
   unitCost: {
     type: Number,
     required: [true, 'Unit cost is required'],
-    min: [0, 'Unit cost cannot be negative']
+    min: [0, 'Unit cost cannot be negative'] // Cost per unit for expense calculation
   },
   supplier: {
     name: {
@@ -66,7 +66,7 @@ const inventoryItemSchema = new mongoose.Schema({
     trim: true
   },
   expiryDate: {
-    type: Date
+    type: Date // Track perishable items expiration
   },
   batchNumber: {
     type: String,
