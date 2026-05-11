@@ -17,7 +17,7 @@ const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: [true, 'Email is required'],
-    unique: true,
+    unique: true, // Ensure no duplicate email addresses
     lowercase: true,
     trim: true,
     match: [/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/, 'Please enter a valid email']
@@ -29,7 +29,7 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['admin', 'manager', 'staff', 'customer'],
+    enum: ['admin', 'manager', 'staff', 'customer'], // Define user role types
     default: 'customer'
   },
   phone: {
@@ -43,7 +43,7 @@ const userSchema = new mongoose.Schema({
   },
   isActive: {
     type: Boolean,
-    default: true
+    default: true // Allows soft deactivation of user accounts
   },
   lastLogin: {
     type: Date
@@ -62,11 +62,15 @@ const userSchema = new mongoose.Schema({
   timestamps: true
 });
 
+// Hash password before saving new user
 userSchema.pre('save', async function(next) {
+  // Only hash if password is modified
   if (!this.isModified('password')) return next();
   
   try {
+    // Generate salt for hashing
     const salt = await bcrypt.genSalt(10);
+    // Hash password with salt
     this.password = await bcrypt.hash(this.password, salt);
     next();
   } catch (error) {
@@ -74,6 +78,7 @@ userSchema.pre('save', async function(next) {
   }
 });
 
+// Compare provided password with stored hashed password
 userSchema.methods.comparePassword = async function(candidatePassword) {
   return await bcrypt.compare(candidatePassword, this.password);
 };
