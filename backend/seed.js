@@ -8,12 +8,14 @@ const MenuItem = require('./models/MenuItem');
 const InventoryItem = require('./models/InventoryItem');
 const Staff = require('./models/Staff');
 
+// Initialize database with sample data
 const seedData = async () => {
   try {
+    // Connect to MongoDB
     await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/restaurant');
     console.log('Connected to MongoDB');
 
-    // Clear existing data
+    // Clear existing data to start fresh
     await User.deleteMany({});
     await MenuCategory.deleteMany({});
     await MenuItem.deleteMany({});
