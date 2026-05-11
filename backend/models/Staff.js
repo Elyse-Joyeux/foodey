@@ -15,17 +15,17 @@ const staffSchema = new mongoose.Schema({
   position: {
     type: String,
     required: [true, 'Position is required'],
-    enum: ['chef', 'cook', 'waiter', 'host', 'manager', 'cashier', 'cleaner', 'bartender', 'sous_chef', 'pastry_chef']
+    enum: ['chef', 'cook', 'waiter', 'host', 'manager', 'cashier', 'cleaner', 'bartender', 'sous_chef', 'pastry_chef'] // Job title
   },
   department: {
     type: String,
     required: [true, 'Department is required'],
-    enum: ['kitchen', 'service', 'management', 'cleaning', 'bar']
+    enum: ['kitchen', 'service', 'management', 'cleaning', 'bar'] // Department assignment
   },
   hireDate: {
     type: Date,
     required: [true, 'Hire date is required'],
-    default: Date.now
+    default: Date.now // Employment start date
   },
   salary: {
     type: Number,
@@ -33,6 +33,7 @@ const staffSchema = new mongoose.Schema({
     min: [0, 'Salary cannot be negative']
   },
   workSchedule: {
+    // 7-day schedule with shift times and days off
     monday: { start: String, end: String, off: Boolean },
     tuesday: { start: String, end: String, off: Boolean },
     wednesday: { start: String, end: String, off: Boolean },
@@ -68,12 +69,13 @@ const staffSchema = new mongoose.Schema({
       type: Number,
       min: 0,
       max: 5,
-      default: 0
+      default: 0 // Performance rating out of 5
     },
     lastReview: Date,
     notes: String
   },
   attendance: [{
+    // Track daily attendance and shift times
     date: Date,
     checkIn: String,
     checkOut: String,
