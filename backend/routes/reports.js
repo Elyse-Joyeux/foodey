@@ -28,6 +28,7 @@ router.get('/sales', auth, authorize('admin', 'manager'), [
     const start = new Date(startDate);
     const end = new Date(endDate);
 
+    // Define date format for grouping (day/week/month/year)
     const groupFormat = {
       day: '%Y-%m-%d',
       week: '%Y-%U',
@@ -37,6 +38,7 @@ router.get('/sales', auth, authorize('admin', 'manager'), [
 
     const salesData = await Order.aggregate([
       {
+        // Match only completed/served orders that are paid
         $match: {
           createdAt: { $gte: start, $lte: end },
           status: { $in: ['completed', 'served'] },
