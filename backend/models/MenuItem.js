@@ -33,11 +33,11 @@ const menuItemSchema = new mongoose.Schema({
   }],
   allergens: [{
     type: String,
-    enum: ['gluten', 'dairy', 'nuts', 'soy', 'eggs', 'fish', 'shellfish', 'sesame', 'none']
+    enum: ['gluten', 'dairy', 'nuts', 'soy', 'eggs', 'fish', 'shellfish', 'sesame', 'none'] // Track allergens for customer safety
   }],
   dietary: [{
     type: String,
-    enum: ['vegetarian', 'vegan', 'gluten-free', 'dairy-free', 'keto', 'paleo', 'halal', 'kosher']
+    enum: ['vegetarian', 'vegan', 'gluten-free', 'dairy-free', 'keto', 'paleo', 'halal', 'kosher'] // Dietary preference tags
   }],
   spicy: {
     type: Number,
@@ -48,7 +48,7 @@ const menuItemSchema = new mongoose.Schema({
   preparationTime: {
     type: Number,
     min: 1,
-    default: 15
+    default: 15 // Time in minutes to prepare this item
   },
   calories: {
     type: Number,
@@ -60,7 +60,7 @@ const menuItemSchema = new mongoose.Schema({
   },
   isFeatured: {
     type: Boolean,
-    default: false
+    default: false // Featured items are promoted on menu
   },
   orderCount: {
     type: Number,
