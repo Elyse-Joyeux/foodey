@@ -27,7 +27,7 @@ const menuCategorySchema = new mongoose.Schema({
   parentCategory: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'MenuCategory',
-    default: null // Allows hierarchical category structure (subcategories)
+    default: null // Allows hierarchical category structure 
   }
 }, {
   timestamps: true
