@@ -25,7 +25,7 @@ const inventoryItemSchema = new mongoose.Schema({
   currentStock: {
     type: Number,
     required: [true, 'Current stock is required'],
-    min: [0, 'Stock cannot be negative'] // Actual quantity in stock
+    min: [0, 'Stock cannot be negative'] // Actual quantity available in stock
   },
   minStock: {
     type: Number,
